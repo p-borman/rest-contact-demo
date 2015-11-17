@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:with="ts=${beans.timestampPrinter.print()}">
+    <title>Addresses</title>
+
+    <div th:include="partials/bootstrap :: import"></div>
+    <script type="text/javascript" th:src="${'/js/pages/address.js?='+ts}"></script>
+</head>
+<body>
+
+<div>
+    <div class="navbar navbar-color">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/home">Address Demo</a>
+        </div>
+
+        <div class="collapse navbar-collapse header-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Address Demo<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/addresses">Addresses</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container" ng-app="addressApp" ng-cloak="">
+    <div ng-controller="showController as show">
+        <div ng-controller="addressAddController as addController" ng-show="show.showAdd">
+            <div class="panel panel-default">
+                <div class="panel-heading">Add An Address</div>
+                <div class="panel-body">
+                    <form name="addressForm" class="form-horizontal" novalidate="true">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="street">Street:</label>
+
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="street" name="street"
+                                       ng-model="addController.street" required="" ng-pattern="/(^[a-zA-Z0-9 ]*$)/"/>
+                                <span class="inline-help text-danger" ng-if="addressForm.street.$error.required">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    You need a street!
+                                </span>
+                                <span class="inline-help text-danger" ng-if="addressForm.street.$error.pattern">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    Street is not valid!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="street2">Street 2:</label>
+
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="street2" name="street2"
+                                       ng-model="addController.street2" ng-pattern="/(^$|^[a-zA-Z0-9 .]*$)/"/>
+                                <span class="inline-help text-danger" ng-if="addressForm.street2.$error.pattern">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    Street 2 is not valid!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="city">City:</label>
+
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="city" name="city"
+                                       ng-model="addController.city" required="" ng-pattern="/(^[a-zA-Z0-9 .#]*$)/"/>
+                                <span class="inline-help text-danger" ng-if="addressForm.city.$error.required">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    You need a city!
+                                </span>
+                                <span class="inline-help text-danger" ng-if="addressForm.city.$error.pattern">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    City is not valid!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="state">State:</label>
+
+                            <div class="col-sm-5">
+                                <input type="text" maxlength="2" class="form-control" id="state" name="state"
+                                       ng-model="addController.state" required="" ng-pattern="/(^[A-Z]{2}|[a-z]{2}$)/"/>
+                                <span class="inline-help text-danger" ng-if="addressForm.state.$error.required">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    You need a state!
+                                </span>
+                                <span class="inline-help text-danger" ng-if="addressForm.state.$error.pattern">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    State must be 2 characters - NY
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="zip"> Zip:</label>
+
+                            <div class="col-sm-5">
+                                <input type="text" maxlength="5" class="form-control" id="zip" name="zip"
+                                       ng-model="addController.zip" required="" ng-pattern="/(^[0-9]{5}$)/"/>
+                                <span class="inline-help text-danger" ng-if="addressForm.zip.$error.required">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    You need a zip code!
+                                </span>
+                                <span class="inline-help text-danger" ng-if="addressForm.zip.$error.pattern">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    State must be 5 numbers - 12345
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Active:</label>
+
+                            <div class="col-sm-5" style="padding-top: 7px;">
+                                <input type="checkbox" id="active" name="active" ng-model="addController.active"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-default" ng-disabled="addressForm.$invalid"
+                                    ng-click="addController.save()">
+                                <li class="glyphicon glyphicon-plus"></li>
+                                Add
+                            </button>
+                            <button type="button" class="btn btn-default" ng-click="addController.cancel()">
+                                <li class="glyphicon glyphicon-ban-circle"></li>
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div ng-controller="addressListController as listController" ng-if="show.showList">
+            <div>
+                <h2 class="alert alert-danger" ng-if="listController.showError()">{{listController.error}}</h2>
+
+                <div ng-show="listController.addresses.length > 0">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Street</th>
+                            <th>Street 2</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip</th>
+                            <th>Active</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="i in listController.addresses track by i.id">
+                            <th>{{::i.id}}</th>
+                            <th>{{::i.street}}</th>
+                            <th>{{::i.street2}}</th>
+                            <th>{{::i.city}}</th>
+                            <th>{{::i.state}}</th>
+                            <th>{{::i.zip}}</th>
+                            <th ng-show="i.active"><span class="label label-success">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </span>
+                            </th>
+                            <th ng-hide="i.active">
+                    <span class="label label-warning">
+                        <span class="glyphicon glyphicon-ban-circle"></span>
+                    </span>
+                            </th>
+                            <th>
+                                <button class="btn btn-xs btn-danger" type="button"
+                                        ng-click="listController.deleteAddress(i)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </th>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row" style="text-align: center">
+                        <ul style="margin-right: 10px;" class="pagination">
+                            <li>
+                                <a ng-click="listController.goToPage(listController.pageNumber - 1,listController.activeOnly)">Prev</a>
+                            </li>
+                            <li ng-repeat="num in listController.pageNumbers"
+                                ng-class="{active: listController.isOnPage(num)}">
+                                <a ng-click="listController.goToPage(num,listController.activeOnly)">{{num+1}}</a>
+                            </li>
+                            <li>
+                                <a ng-click="listController.goToPage(listController.pageNumber + 1,listController.activeOnly)">Next</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <div class="left">
+                            <label>
+                                Items Per Page
+                                <select ng-model="listController.itemsPerPage"
+                                        ng-options="option for option in listController.itemsPerPageOptions"
+                                        ng-change="listController.itemsPerPageChanged()"/>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="checkbox pull-left">
+                        <label>
+                            <input type="checkbox" ng-model="listController.activeOnly"
+                                   ng-change="listController.refreshList()"/>
+                            Active Addresses Only
+                        </label>
+                    </div>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-default" ng-click="show.viewAdd()">
+                            <li class="glyphicon glyphicon-plus"></li>
+                            Add Address
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

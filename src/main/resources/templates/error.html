@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:with="ts=${beans.timestampPrinter.print()}">
+    <title>Error</title>
+
+    <div th:include="partials/bootstrap :: import"></div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var serverBase = /*[[@{/}]]*/ 'value';
+        /*]]>*/
+    </script>
+</head>
+<body>
+
+<div>
+    <div class="navbar navbar-short">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/home">Address Demo</a>
+        </div>
+
+        <div class="collapse navbar-collapse header-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Address Demo<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/addresses">Addresses</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div id="forms" class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Error</strong>
+        </div>
+        <div class="panel-body">
+            <div class="alert alert-danger">
+                <p><strong>Error Code: <span th:text="${status}"></span></strong></p>
+
+                <p><span th:text="${error}"></span> - <span th:text="${message}"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
